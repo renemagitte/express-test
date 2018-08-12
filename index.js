@@ -36,7 +36,7 @@ app.get('/todos', function(request, response) {
 
 app.post('/todos', function (request, response) {
   todos.push(request.body);
-  response.send(todos); // Send the array back to see the update
+  response.send(todos);
 });
 
 app.get('/todos/:id', function (request, response) {

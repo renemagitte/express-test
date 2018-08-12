@@ -1,15 +1,50 @@
-
-
 const output = document.querySelector('.output');
-const fetchButton = document.querySelector('.fetchButton');
+const newTodoInput = document.getElementById('newTodoInput');
+const submitNewTodoButton = document.querySelector('.submitNewTodoButton');
+const newTodoForm = document.querySelector('.newTodoForm');
+let todoDOM;
 
-output.textContent = 'Tjaba!';
 
 function fetchAllTodos(){
+  todoDOM = '';
+    
   fetch('/todos')
     .then((response) => response.json())
-    .then(console.log);
+    .then((todos) => {
+      console.log(todos);
+      todos.map(todo => {
+          todoDOM += `
+            <div>${todo.title}</div>
+        `;
+      });
+      output.innerHTML = todoDOM; 
+  });
 }
 
-fetchButton.addEventListener('click', fetchAllTodos);
+function createNewTodo(){
+    event.preventDefault();
+    
+    const newTodo = { 
+        title: newTodoInput.value,
+        completed: false
+    };
+
+    fetch('/todos', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newTodo)
+      });
+    
+    newTodoForm.reset();
+    fetchAllTodos();
+}
+
+submitNewTodoButton.addEventListener('click', createNewTodo);
+
+fetchAllTodos();
+
+
 
